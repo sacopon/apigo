@@ -11,8 +11,13 @@ func main() {
 		io.WriteString(w, "Hello, world!\n")
 	}
 
-	http.HandleFunc("/", helloHandler)
+	postArticleHandler := func(w http.ResponseWriter, req *http.Request) {
+		io.WriteString(w, "Posting Article...\n")
+	}
+
+	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/article", postArticleHandler)
 
 	log.Println("server start at port 8080")
-	log.Fatail(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

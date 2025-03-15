@@ -24,8 +24,17 @@ func ArticleListHandler(w http.ResponseWriter, req *http.Request) {
 
 	var page int
 	if p, ok := queryMap["page"]; ok && len(p) > 0 {
+		len := len(p)
 		var err error
-		page, err = strconv.Atoi(p[0])
+		for i := 0; i < len; i++ {
+			var tmp int
+			tmp, err = strconv.Atoi(p[i])
+			if err == nil {
+				page = tmp
+				break
+			}
+		}
+
 		if err != nil {
 			http.Error(w, "Invalid query parameter", http.StatusBadRequest)
 			return

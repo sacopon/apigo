@@ -20,7 +20,31 @@ func PostArticleHandler(w http.ResponseWriter, req *http.Request) {
 
 // /article/list のハンドラ
 func ArticleListHandler(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "Article List\n")
+	queryMap := req.URL.Query()
+
+	var page int
+	if p, ok := queryMap["page"]; ok && len(p) > 0 {
+		len := len(p)
+		var err error
+		for i := 0; i < len; i++ {
+			var tmp int
+			tmp, err = strconv.Atoi(p[i])
+			if err == nil {
+				page = tmp
+				break
+			}
+		}
+
+		if err != nil {
+			http.Error(w, "Invalid query parameter", http.StatusBadRequest)
+			return
+		}
+	} else {
+		page = 1
+	}
+
+	resString := fmt.Sprintf("Article List (page %d)\n", page)
+	io.WriteString(w, resString)
 }
 
 // /article/{id} のハンドラ

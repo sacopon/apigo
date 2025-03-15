@@ -8,7 +8,11 @@ import (
 
 // /hello のハンドラ
 func HelloHandler(w http.ResponseWriter, req *http.Request) {
-	io.WriteString(w, "Hello, world!\n")
+	if req.Method == http.MethodGet {
+		io.WriteString(w, "Hello, world!\n")
+	} else {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+	}
 }
 
 // /article のハンドラ
